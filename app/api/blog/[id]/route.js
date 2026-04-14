@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { verifyAuth } from '@/lib/auth'
 
-// GET /api/blog/[id]
+// GET /api/blog/[id] — Obtiene un post por ID (público)
 export async function GET(request, { params }) {
   try {
     const { id } = await params
@@ -23,7 +23,7 @@ export async function GET(request, { params }) {
   }
 }
 
-// PUT /api/blog/[id] Actualiza un post
+// PUT /api/blog/[id] — Actualiza un post (protegido)
 export async function PUT(request, { params }) {
   try {
     const auth = await verifyAuth()
@@ -52,7 +52,6 @@ export async function PUT(request, { params }) {
 
     const imageFile = formData.get('image')
     if (imageFile && imageFile.size > 0) {
-      // Eliminar imagen anterior si existe
       const { data: existing } = await supabaseAdmin
         .from('blog_posts')
         .select('image_url')
@@ -104,7 +103,7 @@ export async function PUT(request, { params }) {
   }
 }
 
-// DELETE /api/blog/[id]
+// DELETE /api/blog/[id] — Elimina un post (protegido)
 export async function DELETE(request, { params }) {
   try {
     const auth = await verifyAuth()

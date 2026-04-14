@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { verifyAuth } from '@/lib/auth'
 
-// GET /api/policies/[id]
+// GET /api/policies/[id] — Obtiene una política por ID (público)
 export async function GET(request, { params }) {
   try {
     const { id } = await params
@@ -23,7 +23,7 @@ export async function GET(request, { params }) {
   }
 }
 
-// PUT /api/policies/[id] Actualiza título y/o archivo PDF
+// PUT /api/policies/[id] — Actualiza título y/o archivo PDF (protegido)
 export async function PUT(request, { params }) {
   try {
     const auth = await verifyAuth()
@@ -52,9 +52,9 @@ export async function PUT(request, { params }) {
         .single()
 
       if (existing?.file_url) {
-        const oldPath = extractFileName(existing.file_url)
-        if (oldPath) {
-          await supabaseAdmin.storage.from('policies').remove([oldPath])
+        const oldFileName = extractFileName(existing.file_url)
+        if (oldFileName) {
+          await supabaseAdmin.storage.from('policies').remove([oldFileName])
         }
       }
 
@@ -99,7 +99,7 @@ export async function PUT(request, { params }) {
   }
 }
 
-// DELETE /api/policies/[id]
+// DELETE /api/policies/[id] — Elimina una política y su PDF (protegido)
 export async function DELETE(request, { params }) {
   try {
     const auth = await verifyAuth()
