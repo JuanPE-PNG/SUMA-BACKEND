@@ -13,9 +13,8 @@ export async function POST(request) {
     }
 
     const transporter = nodemailer.createTransport({
-      service: 'smtpout.secureserver.net',
-      port: 993
-      ,
+      host: 'smtpout.secureserver.net',
+      port: 465,
       secure: true,
       auth: {
         user: process.env.EMAIL_USER,
